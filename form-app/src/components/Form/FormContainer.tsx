@@ -134,7 +134,7 @@ function FormContainer() {
       let data = { name: name, email: email, phone: phone, birth: birth, message: message };
       const dataToSend = JSON.stringify(data);
       //add url here
-      const url = 'https://mockend.com/Julia-Maliutsina/form-validation-test/user/1';
+      const url = '';
       const xhttp = new XMLHttpRequest();
       xhttp.open('POST', url, true);
       xhttp.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
