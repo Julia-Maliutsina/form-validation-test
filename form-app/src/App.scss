@@ -123,3 +123,25 @@ label {
   padding: 5px;
   border-radius: 8px;
 }
+
+.ServerResponse {
+  width: 400px;
+  margin: 10px auto 0 auto;
+  padding: 10px;
+  background-color: $form-color-white;
+  font-family: $main-font;
+  border-radius: 8px;
+  border: 1px solid $form-color-grey;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+
+    &.ResponseTitle {
+      font-family: $title-font;
+      color: $form-color-secondary;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+  }
+}

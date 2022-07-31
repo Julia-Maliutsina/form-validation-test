@@ -21,6 +21,8 @@ function FormContainer() {
   const [birthError, setBirthError] = useState(String);
   const [message, setMessage] = useState(String);
   const [messageError, setMessageError] = useState(String);
+  const [submitDisabled, setSubmitDisabled] = useState(Boolean);
+  const [serverResponse, setServerResponse] = useState(Object);
 
   const changeName = (nameEntered: string) => {
     const newName =
@@ -76,6 +78,7 @@ function FormContainer() {
 
   const changeBirth = (birthEntered: string) => {
     setBirth(birthEntered);
+    setBirthError('');
   };
 
   const changeMessage = (messageEntered: string) => {
@@ -100,6 +103,7 @@ function FormContainer() {
     }
     if (phone.length < 17) {
       setPhoneError(ERRORS.phone);
+      result = false;
     }
     if (!phone || phone === DEFAULT_PHONE) {
       setPhoneError(EMPTY_INPUT_ERROR);
@@ -107,6 +111,7 @@ function FormContainer() {
     }
     if (!birth) {
       setBirthError(EMPTY_INPUT_ERROR);
+      result = false;
     }
     if (!message) {
       setMessageError(EMPTY_INPUT_ERROR);
@@ -118,9 +123,46 @@ function FormContainer() {
   const submitForm = (e: React.MouseEvent<HTMLInputElement, MouseEvent>): void => {
     e.preventDefault();
     checkForEmptyFields();
-    if (!nameError && !emailError && !phoneError && !messageError) {
-      console.log('send form');
-    } else {
+    if (
+      !nameError &&
+      !emailError &&
+      !phoneError &&
+      !birthError &&
+      !messageError &&
+      checkForEmptyFields()
+    ) {
+      let data = { name: name, email: email, phone: phone, birth: birth, message: message };
+      const dataToSend = JSON.stringify(data);
+      //add url here
+      const url = 'https://mockend.com/org/repo/users';
+      const xhttp = new XMLHttpRequest();
+      xhttp.open('POST', url, true);
+      xhttp.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
+      xhttp.send(dataToSend);
+      setSubmitDisabled(true);
+      xhttp.onload = function () {
+        setSubmitDisabled(false);
+        let response = { title: '', serverMessage: '' };
+        if (xhttp.response.status === 'success') {
+          response.title = 'Данные отправлены!';
+          setTimeout(() => {
+            setServerResponse({ title: '', serverMessage: '' });
+            setName('');
+            setEmail('');
+            setPhone(DEFAULT_PHONE);
+            setBirth('');
+            setMessage('');
+          }, 3000);
+        }
+        if (xhttp.response.status === 'error') {
+          response.title = 'Ошибка!';
+          setTimeout(() => {
+            setServerResponse({ title: '', serverMessage: '' });
+          }, 3000);
+        }
+        response.serverMessage = xhttp.response.message;
+        setServerResponse(response);
+      };
     }
   };
 
@@ -142,6 +184,8 @@ function FormContainer() {
       messageError={messageError}
       changeMessage={changeMessage}
       submitForm={submitForm}
+      submitDisabled={submitDisabled}
+      serverResponse={serverResponse}
     />
   );
 }
