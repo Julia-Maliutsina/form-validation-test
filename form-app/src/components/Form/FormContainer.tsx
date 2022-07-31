@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
 import validateName from '../../utils/validateName';
-import validateEmail from '../../utils/validateName';
+import validateEmail from '../../utils/validateEmail';
 import validatePhone from '../../utils/validatePhone';
 import validateMessage from '../../utils/validateMessage';
 
-import ERRORS from '../../constants/errors';
+import { ERRORS, EMPTY_INPUT_ERROR } from '../../constants/errors';
+import { DEFAULT_PHONE } from '../../constants/defaultValues';
 
 import Form from './Form';
 
@@ -14,8 +15,10 @@ function FormContainer() {
   const [nameError, setNameError] = useState(String);
   const [email, setEmail] = useState(String);
   const [emailError, setEmailError] = useState(String);
-  const [phone, setPhone] = useState('+7');
+  const [phone, setPhone] = useState(DEFAULT_PHONE);
   const [phoneError, setPhoneError] = useState(String);
+  const [birth, setBirth] = useState(String);
+  const [birthError, setBirthError] = useState(String);
   const [message, setMessage] = useState(String);
   const [messageError, setMessageError] = useState(String);
 
@@ -71,6 +74,10 @@ function FormContainer() {
     setPhone(newPhone);
   };
 
+  const changeBirth = (birthEntered: string) => {
+    setBirth(birthEntered);
+  };
+
   const changeMessage = (messageEntered: string) => {
     const newMessage = messageEntered;
     setMessage(newMessage);
@@ -78,6 +85,42 @@ function FormContainer() {
       setMessageError('');
     } else {
       setMessageError(ERRORS.message);
+    }
+  };
+
+  const checkForEmptyFields = (): Boolean => {
+    let result = true;
+    if (!name) {
+      setNameError(EMPTY_INPUT_ERROR);
+      result = false;
+    }
+    if (!email) {
+      setEmailError(EMPTY_INPUT_ERROR);
+      result = false;
+    }
+    if (phone.length < 17) {
+      setPhoneError(ERRORS.phone);
+    }
+    if (!phone || phone === DEFAULT_PHONE) {
+      setPhoneError(EMPTY_INPUT_ERROR);
+      result = false;
+    }
+    if (!birth) {
+      setBirthError(EMPTY_INPUT_ERROR);
+    }
+    if (!message) {
+      setMessageError(EMPTY_INPUT_ERROR);
+      result = false;
+    }
+    return result;
+  };
+
+  const submitForm = (e: React.MouseEvent<HTMLInputElement, MouseEvent>): void => {
+    e.preventDefault();
+    checkForEmptyFields();
+    if (!nameError && !emailError && !phoneError && !messageError) {
+      console.log('send form');
+    } else {
     }
   };
 
@@ -92,9 +135,13 @@ function FormContainer() {
       phone={phone}
       phoneError={phoneError}
       changePhone={changePhone}
+      birth={birth}
+      birthError={birthError}
+      changeBirth={changeBirth}
       message={message}
       messageError={messageError}
       changeMessage={changeMessage}
+      submitForm={submitForm}
     />
   );
 }

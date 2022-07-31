@@ -1,5 +1,3 @@
-export { NameInput } from './Name';
-export { EmailInput } from './Email';
-export { PhoneInput } from './Phone';
-export { BirthInput } from './Birth';
-export { MessageInput } from './Message';
+export { TextInput } from './Text';
+export { DateInput } from './Date';
+export { TextareaInput } from './Textarea';

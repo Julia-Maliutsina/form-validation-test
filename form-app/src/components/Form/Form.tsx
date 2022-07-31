@@ -1,6 +1,8 @@
 import { FC } from 'react';
 
-import { NameInput, EmailInput, PhoneInput, BirthInput, MessageInput } from './Inputs';
+import { TextInput, DateInput, TextareaInput } from './Inputs';
+
+import LABELS from '../../constants/labels';
 
 interface FormProps {
   name: string | number | readonly string[] | undefined;
@@ -12,9 +14,13 @@ interface FormProps {
   phone: string | number | readonly string[] | undefined;
   phoneError: String;
   changePhone: (phoneEntered: string) => void;
+  birth: string | number | readonly string[] | undefined;
+  birthError: String;
+  changeBirth: (birthEntered: string) => void;
   message: string | number | readonly string[] | undefined;
   messageError: String;
   changeMessage: (messageEntered: string) => void;
+  submitForm: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
 }
 
 const Form: FC<FormProps> = ({
@@ -27,24 +33,38 @@ const Form: FC<FormProps> = ({
   phone,
   phoneError,
   changePhone,
+  birth,
+  birthError,
+  changeBirth,
   message,
   messageError,
   changeMessage,
+  submitForm,
 }) => (
   <form>
     <p className="Title">Заполните форму</p>
     <div className="Divider"></div>
-    <NameInput name={name} nameError={nameError} changeName={changeName} />
-    <EmailInput email={email} emailError={emailError} changeEmail={changeEmail} />
-    <PhoneInput phone={phone} phoneError={phoneError} changePhone={changePhone} />
-    <BirthInput />
+    <TextInput label={LABELS.name} text={name} textError={nameError} changeText={changeName} />
+    <TextInput label={LABELS.email} text={email} textError={emailError} changeText={changeEmail} />
+    <TextInput label={LABELS.phone} text={phone} textError={phoneError} changeText={changePhone} />
+    <DateInput label={LABELS.birth} date={birth} dateError={birthError} changeDate={changeBirth} />
     <div className="MessageHead">
       <div className="Divider"></div>
-      <p className="MessageTitle">Введите сообщение</p>
+      <p className="MessageTitle">{LABELS.message}</p>
       <div className="Divider"></div>
     </div>
-    <MessageInput message={message} messageError={messageError} changeMessage={changeMessage} />
-    <input className="SubmitButton" type="submit" value="Отправить" />
+    <TextareaInput
+      className="MessageInput"
+      textarea={message}
+      textareaError={messageError}
+      changeTextarea={changeMessage}
+    />
+    <input
+      className="SubmitButton"
+      type="submit"
+      onClick={(e) => submitForm(e)}
+      value="Отправить"
+    />
   </form>
 );
 
