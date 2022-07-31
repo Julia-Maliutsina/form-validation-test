@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import validateName from '../../utils/validateName';
 import validateEmail from '../../utils/validateName';
+import validatePhone from '../../utils/validatePhone';
 import validateMessage from '../../utils/validateMessage';
 
 import ERRORS from '../../constants/errors';
@@ -13,6 +14,8 @@ function FormContainer() {
   const [nameError, setNameError] = useState(String);
   const [email, setEmail] = useState(String);
   const [emailError, setEmailError] = useState(String);
+  const [phone, setPhone] = useState('+7');
+  const [phoneError, setPhoneError] = useState(String);
   const [message, setMessage] = useState(String);
   const [messageError, setMessageError] = useState(String);
 
@@ -39,6 +42,35 @@ function FormContainer() {
     }
   };
 
+  const addStr = (str: string, index: number, stringToAdd: string) => {
+    return str.substring(0, index) + stringToAdd + str.substring(index, str.length);
+  };
+
+  const changePhone = (phoneEntered: string) => {
+    let oldPhone = phone;
+    let newPhone = phoneEntered;
+    if (newPhone.length > 17) {
+      newPhone = newPhone.slice(0, 17);
+    }
+    if (!validatePhone(newPhone)) {
+      setPhoneError(ERRORS.phone);
+      setPhone(oldPhone);
+      return;
+    }
+    if (newPhone.length >= 3 && newPhone.indexOf('(') < 0) {
+      newPhone = addStr(newPhone, 2, ' (');
+    }
+    if (newPhone.length > 7 && newPhone.indexOf(')') < 0) {
+      newPhone = addStr(newPhone, 7, ') ');
+    }
+    if (newPhone.length > 12 && newPhone.lastIndexOf(' ') !== 12) {
+      newPhone = addStr(newPhone, 12, ' ');
+    }
+
+    setPhoneError('');
+    setPhone(newPhone);
+  };
+
   const changeMessage = (messageEntered: string) => {
     const newMessage = messageEntered;
     setMessage(newMessage);
@@ -57,6 +89,9 @@ function FormContainer() {
       email={email}
       emailError={emailError}
       changeEmail={changeEmail}
+      phone={phone}
+      phoneError={phoneError}
+      changePhone={changePhone}
       message={message}
       messageError={messageError}
       changeMessage={changeMessage}

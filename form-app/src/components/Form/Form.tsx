@@ -9,9 +9,12 @@ interface FormProps {
   email: string | number | readonly string[] | undefined;
   emailError: String;
   changeEmail: (emailEntered: string) => void;
+  phone: string | number | readonly string[] | undefined;
+  phoneError: String;
+  changePhone: (phoneEntered: string) => void;
   message: string | number | readonly string[] | undefined;
   messageError: String;
-  changeMessage: (emailEntered: string) => void;
+  changeMessage: (messageEntered: string) => void;
 }
 
 const Form: FC<FormProps> = ({
@@ -21,6 +24,9 @@ const Form: FC<FormProps> = ({
   email,
   emailError,
   changeEmail,
+  phone,
+  phoneError,
+  changePhone,
   message,
   messageError,
   changeMessage,
@@ -30,7 +36,7 @@ const Form: FC<FormProps> = ({
     <div className="Divider"></div>
     <NameInput name={name} nameError={nameError} changeName={changeName} />
     <EmailInput email={email} emailError={emailError} changeEmail={changeEmail} />
-    <PhoneInput />
+    <PhoneInput phone={phone} phoneError={phoneError} changePhone={changePhone} />
     <BirthInput />
     <div className="MessageHead">
       <div className="Divider"></div>
