@@ -1,6 +1,5 @@
 {
   "User": {
-    "status": { "string": ["sucess", "error"] },
-    "message": "Данные сохранены"
+    "status": { "string": ["sucess", "error"] }
   }
 }
